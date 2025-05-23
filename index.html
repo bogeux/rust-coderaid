@@ -1083,6 +1083,14 @@
       let testedCodes = new Set();
       let currentFilter = 'all';
 
+      // Load progress from localStorage
+      function loadProgress() {
+          const saved = localStorage.getItem('rustCodeProgress');
+          if (saved) {
+              testedCodes = new Set(JSON.parse(saved));
+          }
+      }
+      
       // Initialize the app
 function init() {
     loadProgress();
