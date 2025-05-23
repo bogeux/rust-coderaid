@@ -1125,25 +1125,18 @@ function renderCodes() {
     grid.appendChild(fragment);
 }
 
-      function toggleCode(code) {
-          if (testedCodes.has(code)) {
-              testedCodes.delete(code);
-          } else {
-              testedCodes.add(code);
-          }
-          
-          // Update only the clicked element using event delegation
-          const clickedElement = event.target;
-          const isTested = testedCodes.has(code);
-          clickedElement.className = `code-item p-3 rounded-lg text-center font-mono cursor-pointer transition-all duration-200 ${
-              isTested
-                  ? 'bg-green-600 hover:bg-green-700 text-white'
-                  : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
-          }`;
-          
-          saveProgress();
-          updateStats();
-      }
+function toggleCode(code, element) {
+    if (testedCodes.has(code)) {
+        testedCodes.delete(code);
+        element.className = 'code-item p-3 rounded-lg text-center font-mono cursor-pointer transition-all duration-200 bg-gray-700 hover:bg-gray-600 text-gray-200';
+    } else {
+        testedCodes.add(code);
+        element.className = 'code-item p-3 rounded-lg text-center font-mono cursor-pointer transition-all duration-200 bg-green-600 hover:bg-green-700 text-white';
+    }
+    
+    saveProgress();
+    updateStats();
+}
 
       // Update statistics
       function updateStats() {
