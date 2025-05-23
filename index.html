@@ -1098,8 +1098,7 @@ function init() {
         }
     });
 }
-
-// Replace the renderCodes function with this optimized version:
+// Replace your renderCodes function with this:
 function renderCodes() {
     const grid = document.getElementById('codesGrid');
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
@@ -1113,7 +1112,6 @@ function renderCodes() {
         return matchesSearch;
     });
 
-    // Use DocumentFragment for better performance
     const fragment = document.createDocumentFragment();
     
     filteredCodes.forEach(code => {
@@ -1146,20 +1144,21 @@ function toggleCode(code, element) {
     updateStats();
 }
 
-      // Update statistics
-      function updateStats() {
-          const total = codes.length;
-          const tested = testedCodes.size;
-          const remaining = total - tested;
-          const progress = Math.round((tested / total) * 100);
+// Keep updateStats async:
+function updateStats() {
+    requestIdleCallback(() => {
+        const total = codes.length;
+        const tested = testedCodes.size;
+        const remaining = total - tested;
+        const progress = Math.round((tested / total) * 100);
 
-          document.getElementById('totalCodes').textContent = total;
-          document.getElementById('testedCodes').textContent = tested;
-          document.getElementById('remainingCodes').textContent = remaining;
-          document.getElementById('progressPercent').textContent = `${progress}%`;
-          document.getElementById('progressBar').style.width = `${progress}%`;
-      }
-
+        document.getElementById('totalCodes').textContent = total;
+        document.getElementById('testedCodes').textContent = tested;
+        document.getElementById('remainingCodes').textContent = remaining;
+        document.getElementById('progressPercent').textContent = `${progress}%`;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    });
+}
       // Filter codes by status
       function filterByStatus(status) {
           currentFilter = status;
@@ -1209,7 +1208,6 @@ function saveProgress() {
 }
 
 function updateStats() {
-    requestIdleCallback(() => {
         const total = codes.length;
         const tested = testedCodes.size;
         const remaining = total - tested;
@@ -1220,7 +1218,6 @@ function updateStats() {
         document.getElementById('remainingCodes').textContent = remaining;
         document.getElementById('progressPercent').textContent = `${progress}%`;
         document.getElementById('progressBar').style.width = `${progress}%`;
-    });
 }
       // Export progress as JSON
       function exportProgress() {
