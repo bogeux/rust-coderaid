@@ -1122,15 +1122,28 @@
           }).join('');
       }
 
-      // Toggle code tested status
       function toggleCode(code) {
           if (testedCodes.has(code)) {
               testedCodes.delete(code);
           } else {
               testedCodes.add(code);
           }
+          
+          // Update only the specific code item
+          const codeItems = document.querySelectorAll('.code-item');
+          codeItems.forEach(item => {
+              const itemCode = item.textContent.trim() === "0000" ? "0" : item.textContent.trim();
+              if (itemCode === code) {
+                  const isTested = testedCodes.has(code);
+                  item.className = `code-item p-3 rounded-lg text-center font-mono cursor-pointer transition-all duration-200 ${
+                      isTested
+                          ? 'bg-green-600 hover:bg-green-700 text-white'
+                          : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+                  }`;
+              }
+          });
+          
           saveProgress();
-          renderCodes();
           updateStats();
       }
 
