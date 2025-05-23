@@ -1084,12 +1084,20 @@
       let currentFilter = 'all';
 
       // Initialize the app
-      function init() {
-          loadProgress();
-          renderCodes();
-          updateStats();
-          updateFilterButtons();
-      }
+function init() {
+    loadProgress();
+    renderCodes();
+    updateStats();
+    updateFilterButtons();
+    
+    // Add event delegation for clicks
+    document.getElementById('codesGrid').addEventListener('click', function(e) {
+        if (e.target.classList.contains('code-item')) {
+            const code = e.target.dataset.code;
+            toggleCode(code, e.target);
+        }
+    });
+}
 
 // Replace the renderCodes function with this optimized version:
 function renderCodes() {
