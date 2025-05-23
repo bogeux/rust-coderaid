@@ -1091,36 +1091,39 @@
           updateFilterButtons();
       }
 
-      // Render codes based on current filter and search
-      function renderCodes() {
-          const grid = document.getElementById('codesGrid');
-          const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+// Replace the renderCodes function with this optimized version:
+function renderCodes() {
+    const grid = document.getElementById('codesGrid');
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
 
-          let filteredCodes = codes.filter(code => {
-              const matchesSearch = code.toLowerCase().includes(searchTerm);
-              const isTested = testedCodes.has(code);
+    let filteredCodes = codes.filter(code => {
+        const matchesSearch = code.toLowerCase().includes(searchTerm);
+        const isTested = testedCodes.has(code);
 
-              if (currentFilter === 'tested') return matchesSearch && isTested;
-              if (currentFilter === 'untested') return matchesSearch && !isTested;
-              return matchesSearch; // 'all'
-          });
+        if (currentFilter === 'tested') return matchesSearch && isTested;
+        if (currentFilter === 'untested') return matchesSearch && !isTested;
+        return matchesSearch;
+    });
 
-          grid.innerHTML = filteredCodes.map(code => {
-              const isTested = testedCodes.has(code);
-              return `
-                  <div 
-                      class="code-item p-3 rounded-lg text-center font-mono cursor-pointer transition-all duration-200 ${
-                          isTested
-                              ? 'bg-green-600 hover:bg-green-700 text-white'
-                              : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
-                      }"
-                      onclick="toggleCode('${code}', event)"
-                  >
-                      ${code === "NULL" ? "0000" : code}
-                  </div>
-              `;
-          }).join('');
-      }
+    // Use DocumentFragment for better performance
+    const fragment = document.createDocumentFragment();
+    
+    filteredCodes.forEach(code => {
+        const isTested = testedCodes.has(code);
+        const div = document.createElement('div');
+        div.className = `code-item p-3 rounded-lg text-center font-mono cursor-pointer transition-all duration-200 ${
+            isTested
+                ? 'bg-green-600 hover:bg-green-700 text-white'
+                : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
+        }`;
+        div.textContent = code === "0" ? "0000" : code;
+        div.dataset.code = code;
+        fragment.appendChild(div);
+    });
+    
+    grid.innerHTML = '';
+    grid.appendChild(fragment);
+}
 
       function toggleCode(code) {
           if (testedCodes.has(code)) {
