@@ -1202,19 +1202,26 @@ function toggleCode(code, element) {
           updateStats();
       }
 
-      // Save progress to localStorage
-      function saveProgress() {
-          localStorage.setItem('rustCodeProgress', JSON.stringify([...testedCodes]));
-      }
+function saveProgress() {
+    requestIdleCallback(() => {
+        localStorage.setItem('rustCodeProgress', JSON.stringify([...testedCodes]));
+    });
+}
 
-      // Load progress from localStorage
-      function loadProgress() {
-          const saved = localStorage.getItem('rustCodeProgress');
-          if (saved) {
-              testedCodes = new Set(JSON.parse(saved));
-          }
-      }
+function updateStats() {
+    requestIdleCallback(() => {
+        const total = codes.length;
+        const tested = testedCodes.size;
+        const remaining = total - tested;
+        const progress = Math.round((tested / total) * 100);
 
+        document.getElementById('totalCodes').textContent = total;
+        document.getElementById('testedCodes').textContent = tested;
+        document.getElementById('remainingCodes').textContent = remaining;
+        document.getElementById('progressPercent').textContent = `${progress}%`;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    });
+}
       // Export progress as JSON
       function exportProgress() {
           const data = {
